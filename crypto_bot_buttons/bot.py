@@ -10,7 +10,7 @@ bot = telebot.TeleBot(TOKEN)
 @bot.message_handler(commands=['start'])
 def start(message):
     text = '''Привет! \n Я бот для конвертации валют.
-Для начала работы выберите <Меню> которое тебе удобно.
+Для начала работы выберите <Меню> которое удобно.
 Мои команды:
 /start - начало работы,
 /values - список валют.'''
@@ -131,16 +131,6 @@ def currency_quote(message):
     except Exception as a:
         bot.reply_to(message, f'Не удалось обработать команду.\n{a}')
 
-
-    # if quote in keys.values():
-    #     bot.reply_to(message, f'Ваша валюта - "{quote}"')
-    #     msg = bot.send_message(message.chat.id, 'Выбери валюту для перевода')
-    #     bot.register_next_step_handler(msg, currency_base, quote)
-    # else:
-    #     bot.reply_to(message, f'Будь внимательней при выборе')
-    #     msg = bot.send_message(message.chat.id, 'Выбери валюту из списка')
-    #     bot.register_next_step_handler(msg, menu_buttons)
-
 # обработка второй валюты
 @bot.message_handler(content_types=['text', ])
 def currency_base(message, quote: str):
@@ -161,21 +151,9 @@ def currency_base(message, quote: str):
     except Exception as a:
         bot.reply_to(message, f'Не удалось обработать команду.\n{a}')
 
-    # base = message.text
-    # if (base in keys.values()) and (quote != base):
-    #     bot.reply_to(message, f'Ваша валюта - {base}')
-    #     msg = bot.send_message(message.chat.id, 'Введите количество')
-    #     bot.register_next_step_handler(msg, currency_amount, quote, base)
-    # else:
-    #     bot.reply_to(message, f'Введите валюту из списка')
-    #     msg = bot.send_message(message.chat.id, 'Выбери валюту для перевода')
-    #     bot.register_next_step_handler(msg, currency_base, quote)
-
 # обработка количества валюты и суммы валюты
 @bot.message_handler(content_types=['text', ])
 def currency_amount(message, quote, base):
-    # amount = message.text
-    # bot.reply_to(message, f'Введенное количество - {amount}')
 
     try:
         amount = message.text
@@ -198,34 +176,6 @@ def currency_amount(message, quote, base):
         bot.register_next_step_handler(msg, currency_amount, quote, base)
     except Exception as a:
         bot.reply_to(message, f'Не удалось обработать команду.\n{a}')
-
-#     try:
-#         amount = float(amount)
-#         if amount > 0:
-#             total = ConvertButtons.get_total(quote, base, amount) # класс, метод ()
-#
-#             text = f'Цена {amount} {quote} в {base} - {total}'
-#             bot.send_message(message.chat.id, text)
-#
-#             text = '''
-# Если хотите продолжить введите валюту.
-# Если надоело выберите <Назад>.'''
-#             msg = bot.send_message(message.chat.id, text)
-#             bot.register_next_step_handler(msg, back)
-#         else:
-#             bot.reply_to(message, f'Введено не верное колличество валюты')
-#             msg = bot.send_message(message.chat.id, 'Введите колличество валюты')
-#             bot.register_next_step_handler(msg, currency_amount, quote, base)
-#
-#     except ValueError:
-#         bot.reply_to(message, f'Введено не верное колличество валюты')
-#         msg = bot.send_message(message.chat.id, 'Введите колличество валюты')
-#         bot.register_next_step_handler(msg, currency_amount, quote, base)
-#
-#     except TypeError:
-#         bot.reply_to(message, f'Введено не верное колличество валюты')
-#         msg = bot.send_message(message.chat.id, 'Введите колличество валюты')
-#         bot.register_next_step_handler(msg, currency_amount, quote, base)
 
 @bot.message_handler(content_types=['text', ]) # обработка кнопки назад
 
