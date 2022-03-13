@@ -7,17 +7,16 @@ import markup as nav # импорт клавиатуры
 bot = telebot.TeleBot(TOKEN)
 
 # начальное приветствие, комманды 'start', 'help'
-@bot.message_handler(commands=['start', 'help'])
-def start(message: telebot.types.Message):
+@bot.message_handler(commands=['start'])
+def start(message):
     text = '''Привет! \n Я бот для конвертации валют.
 Для начала работы выберите <Меню> которое тебе удобно.
 Мои команды:
 /start - начало работы,
-/help - помощь,
 /values - список валют.'''
 
-    bot.reply_to(message, text, reply_markup=nav.markup_main) # клавиатура
-    msg = bot.send_message(message.chat.id, 'Выберите Меню')
+    bot.reply_to(message, text)
+    msg = bot.send_message(message.chat.id, 'Выберите Меню', reply_markup=nav.markup_main) # клавиатура)
     bot.register_next_step_handler(msg, currency_buttons)
 
 # список доступных валют
@@ -39,6 +38,8 @@ def currency_buttons(message):
         currency_menu_buttons(message)      # то переходим в currency_menu_buttons
     elif message.text == '/values':         # если /values
         currency(message)                   # то переходим в currency
+    elif message.text == '/start':          # если /start
+        start(message)                      # то переходим в начало start
 
 # приветствие меню без кнопок
 @bot.message_handler(content_types=['text', ])
@@ -46,6 +47,7 @@ def currency_menu_back(message):
     text = '''И так, начнем. 
 Введите команды в слелующей последовательности:
 <Имя валюты> <В какую валюту перевести> <Количество переводимой валюты>.
+Пример ввода: доллар рубль 45
 Для возврата выбери <Назад>'''
     bot.reply_to(message, text, )
     msg = bot.send_message(message.chat.id, 'Введите валюту', reply_markup=nav.markup_back) # клавиатура
