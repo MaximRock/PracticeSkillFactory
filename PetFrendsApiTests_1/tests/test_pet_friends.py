@@ -54,6 +54,43 @@ def test_get_all_pets_failed_key(filter='my_pets'):
     assert status == 200
     assert len(result['pets']) > 0
 
+def test_get_all_pets_failed_filter_number_int(filter=4456):
+    """ В значение filter указываем число int, ожидаем ошибку 500"""
+
+    # Отправляем запрос и сохраняем полученный ответ с кодом статуса в status.
+    _, auth_key = pf.get_api_key(valid_email, valid_password)
+    status, result = pf.get_list_of_pets(auth_key_failed, filter)
+    assert status == 200
+    assert len(result['pets']) > 0
+
+def test_get_all_pets_failed_filter_invalid_string(filter='mypetspets'):
+    """ В значение filter указываем значение - "mypetspets" как str, ожидаем ошибку 500"""
+
+    # Отправляем запрос и сохраняем полученный ответ с кодом статуса в status.
+    _, auth_key = pf.get_api_key(valid_email, valid_password)
+    status, result = pf.get_list_of_pets(auth_key_failed, filter)
+    assert status == 200
+    assert len(result['pets']) > 0
+
+def test_get_all_pets_failed_long_string(filter='zxkjcvbluidsahgkdfhbvsdfhbgfhg4dyju4c4hvjbb4jy4avs4vd644j6dzcf1g1vh1bfgju4b6fhb4sdfg1vsh4bfjk4fjhfdgsaddgvfjb4kn44nh4dsfcdsgdfhb4jnlkm,ghnjdgdfxasfsdgvdh4jbu4nknk4lfgdvfcasd4yb4ju4nkgk4dvgdf4hb4jkhd4hbd4hnb;sdf6s84fbasef;oidhgf;jgdf6+8h4df65h4dfh4d6fh4d+6fh4df64hd6h4dj4h,4gj6j4dtdv4hd4hjd6h4vdgsdgsgsrtgsdfghsdfheshfghdfhdfh647546846548fgh6df4hg6df4hgdf8h4d6f4ghd6f5g4hd6f5gh4df5gh4df5gh4df6g5h4df6g5h4dfg6h5d4fghd6f5h4'):
+    """ В значение filter указываем значение состоящее из 420 символов как str, ожидаем ошибку 500"""
+
+    # Отправляем запрос и сохраняем полученный ответ с кодом статуса в status.
+    _, auth_key = pf.get_api_key(valid_email, valid_password)
+    status, result = pf.get_list_of_pets(auth_key_failed, filter)
+    assert status == 200
+    assert len(result['pets']) > 0
+
+def test_get_all_pets_failed_filter_symbols(filter='!!@#%$^&'):
+    """ В значение filter указываем спец. символы как str, ожидаем ошибку 500"""
+
+    # Отправляем запрос и сохраняем полученный ответ с кодом статуса в status.
+    _, auth_key = pf.get_api_key(valid_email, valid_password)
+    status, result = pf.get_list_of_pets(auth_key_failed, filter)
+    assert status == 200
+    assert len(result['pets']) > 0
+
+
 def test_update_remote_pet_info(name='Матрас', animal_type='Кот', age=4):
     """Проверяем возможность обновления информации о несуществующем питомце,
         ожидаем ошибку 400, вывод сообщения. Используем pet_id - id удаленного питомца"""
@@ -102,7 +139,7 @@ def test_add_new_pet_without_photo_key_failed(name='Матрас', animal_type='
     assert status == 200
 
 def test_add_new_pet_with_valid_data_auth_key_failed(name='Matras', animal_type='Кот', age='2', pet_photo='images/cat_matras.JPG'):
-    """Проверяем добавление питомцас не существующим auth_key,
+    """Проверяем добавление питомца с не существующим auth_key,
         ожидаем ошибку 403"""
 
     # Получаем полный путь изображения питомца и сохраняем в переменную pet_photo
